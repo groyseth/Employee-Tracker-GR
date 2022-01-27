@@ -107,14 +107,15 @@ function addRole() {
 
 
 function addEmployee() {
-  db.query("SELECT * FROM employee_role ", function (err, result) {
-
+  db.query("SELECT * FROM employee ", function (err, result) {
+   console.log(result);
     const choices = result.map(r => {
-      return { name: r.title, value: r.role_id }
+      return { name: r.role_title, value: r.role_title }
+      
     })
 
-    const choicess = result.map(r => {
-      return { name: r.title, value: r.role_id }
+    const managerChoices = result.map(r => {
+      return { name: r.first_name, value: r.role_id }
     })
     inquirer
       .prompt([
@@ -138,18 +139,18 @@ function addEmployee() {
         {
           type: "list",
           message: "Who is your manager?",
-          choicess,
+          choices:managerChoices,
           name: "empManager"
         }
 
       ])
       .then((answer) => {
-        // console.log(managerInfo);
-        db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)", [answer.empFirst, answer.empLast, answer.empRole, answer.empManager], function (err, result) {
-          if (err) throw err;
-          console.log("Added employee:", result);
-          initalChoice();
-        })
+        console.log(answer);
+        // db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)", [answer.empFirst, answer.empLast, answer.empRole, answer.empManager], function (err, result) {
+        //   if (err) throw err;
+        //   console.log("Added employee:", result);
+        //   initalChoice();
+        // })
       })
   })
 }
