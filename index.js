@@ -111,11 +111,11 @@ function addEmployee() {
    console.log(result);
     const choices = result.map(r => {
       return { name: r.role_title, value: r.role_title }
-      
+      //role
     })
 
     const managerChoices = result.map(r => {
-      return { name: r.first_name, value: r.role_id }
+      return { name: r.first_name, value: r.first_name}
     })
     inquirer
       .prompt([
@@ -142,15 +142,16 @@ function addEmployee() {
           choices:managerChoices,
           name: "empManager"
         }
+       
 
       ])
       .then((answer) => {
         console.log(answer);
-        // db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)", [answer.empFirst, answer.empLast, answer.empRole, answer.empManager], function (err, result) {
-        //   if (err) throw err;
-        //   console.log("Added employee:", result);
-        //   initalChoice();
-        // })
+        db.query("INSERT INTO employee (first_name, last_name, role_title,  manager_name) VALUES(?, ?, ?, ?)", [answer.empFirst, answer.empLast, answer.empRole, answer.empManager], function (err, result) {
+          if (err) throw err;
+          console.log("Added employee:", result);
+          initalChoice();
+        })
       })
   })
 }
