@@ -12,8 +12,8 @@ CREATE TABLE employee_role (
     role_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30),
     salary DECIMAL,
-    department_id INT,
-    FOREIGN KEY (department_id)
+    dep_id INT,
+    FOREIGN KEY (dep_id)
     REFERENCES department(department_id)
     ON DELETE SET NULL
 );

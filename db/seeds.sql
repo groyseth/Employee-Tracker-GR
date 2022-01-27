@@ -6,11 +6,11 @@ VALUES ("microsoft"),
 
 
 
-INSERT INTO employee_role (title, salary)
-VALUES ("programer", 30030.00),
-("cool guy", 39339.00),
-("Janater", 10.00),
-("Guy standing at door", 1.00);
+INSERT INTO employee_role (title, salary, dep_id)
+VALUES ("programer", 30030.00, 1),
+("cool guy", 39339.00, 2),
+("Janater", 10.00, 3),
+("Guy standing at door", 1.00, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Grant", "Royseth", 1, 1),
