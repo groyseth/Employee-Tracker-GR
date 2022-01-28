@@ -27,7 +27,10 @@ For that data base open mysql command line, type your password and input the fil
 ## Credits
 Made by Grant Royseth!
 
+## What I learned and challenges
 
+I was having trubble initally getting the tables to join and that took some time. I didnt get to the update employee section but I got the other sections completed.
+I learned how to incorperate inquiror npm with mysql and I had a good time with this paticular challenge.
 
 ## Questions
 My profile page [GitHub](https://github.com/groyseth)
