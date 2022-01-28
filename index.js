@@ -32,7 +32,7 @@ function employee_role() {
     initalChoice();
   })
 }
-// employee_role()
+
 
 function employee() {
   db.query("SELECT * FROM employee", function (err, result) {
@@ -41,7 +41,7 @@ function employee() {
     initalChoice();
   })
 }
-// var snow = "snow";
+
 function addDepartment() {
   inquirer
     .prompt([
