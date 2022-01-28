@@ -10,6 +10,7 @@ employee.first_name,
 employee.last_name,
 employee_role.title,
 employee_role.salary,
+employee_role.role_id,
 department.department_name,
 employee.manager_name AS manager
 
@@ -20,6 +21,9 @@ from employee
   ON employee.manager_id = employee.employee_id
   LEFT JOIN department
   ON department.department_name = employee_role.dep_name;
+  
+  
+  
  
 
 -- SELECT * from employee

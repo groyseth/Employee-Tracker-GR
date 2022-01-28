@@ -59,6 +59,7 @@ function addDepartment() {
       db.query("INSERT INTO department (department_name) VALUES (?)", answer.depName, function (err, result) {
         if (err) throw err;
         console.log("added department:", result);
+        initalChoice();
       })
     })
 }
@@ -68,7 +69,7 @@ function addRole() {
   db.query("SELECT * FROM department ", function (err, result) {
 
     const choices = result.map(r => {
-      return { name: r.department_name, value: r.department_id }
+      return { name: r.department_name, value: r.department_name }
     })
 
     inquirer
@@ -95,7 +96,7 @@ function addRole() {
         //use role for choices \
         //
 
-        db.query("INSERT INTO employee_role (title, salary, dep_id) VALUES ( ?, ?, ?)", [answer.roleName, answer.salary, answer.departmentID], function (err, result) {
+        db.query("INSERT INTO employee_role (title, salary, dep_name) VALUES ( ?, ?, ?)", [answer.roleName, answer.salary, answer.departmentID], function (err, result) {
           if (err) throw err;
           console.log("added role:", result);
           initalChoice();
@@ -107,13 +108,18 @@ function addRole() {
 
 
 function addEmployee() {
-  db.query("SELECT * FROM employee ", function (err, result) {
-   console.log(result);
-    const choices = result.map(r => {
-      return { name: r.role_title, value: r.role_title }
-      //role
-    })
+  db.query("SELECT * FROM employee_role ", function (err, result){
+    var roleChoices = result.map(r => {
+    return {name: r.title, value: r.title}
+  })
 
+  db.query("SELECT * FROM department ", function (err, result){
+    var depChoices = result.map(r => {
+    return {name: r.department_name, value: r.department_name}
+  })
+
+  db.query("SELECT * FROM employee ", function (err, result) {
+  //  console.log(result);
     const managerChoices = result.map(r => {
       return { name: r.first_name, value: r.first_name}
     })
@@ -133,7 +139,7 @@ function addEmployee() {
         {
           type: "list",
           message: "What is employee role?",
-          choices,
+          choices: roleChoices,
           name: "empRole"
         },
         {
@@ -141,18 +147,26 @@ function addEmployee() {
           message: "Who is your manager?",
           choices:managerChoices,
           name: "empManager"
+        },
+        {
+          type: "list",
+          message: "for witch department?",
+          choices:depChoices,
+          name: "empDEP"
         }
        
 
       ])
       .then((answer) => {
         console.log(answer);
-        db.query("INSERT INTO employee (first_name, last_name, role_title,  manager_name) VALUES(?, ?, ?, ?)", [answer.empFirst, answer.empLast, answer.empRole, answer.empManager], function (err, result) {
+        db.query("INSERT INTO employee (first_name, last_name, role_title,  manager_name, department_name) VALUES(?, ?, ?, ?, ?)", [answer.empFirst, answer.empLast, answer.empRole, answer.empManager, answer.empDEP], function (err, result) {
           if (err) throw err;
           console.log("Added employee:", result);
           initalChoice();
         })
       })
+  })
+})
   })
 }
 

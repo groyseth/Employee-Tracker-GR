@@ -7,17 +7,17 @@ VALUES ("microsoft"),
 
 
 INSERT INTO employee_role (title, salary, dep_name)
-VALUES ("programer", 30030.00,  "microsoft"),
-("Intern", 39339.00,  "google"),
+VALUES ("programer", 3000.00,  "microsoft"),
+("Intern", 20.00,  "google"),
 ("Janater", 10.00,  "holiday"),
 ("manager", 100.00,   "front-end");
 -- ("None")
 
 
-INSERT INTO employee (first_name, last_name, role_title,  manager_name)
-VALUES ("Grant", "Royseth",  "programer",  "Grant"),
-("Brody", "Mike",  "Intern",  "Grant"),
-("Yohan", "Provloskie", "Janater",  "Grant"),
-("Chad", "Megachad",  "manager","Grant");
+INSERT INTO employee (first_name, last_name, role_title, manager_name, department_name, salary)
+VALUES ("Grant", "Royseth",  "programer",  "Grant", "microsoft", 3000.00),
+("Brody", "Mike",  "Intern",  "Grant", "google", 20.00),
+("Yohan", "Provloskie", "Janater",  "Grant", "holiday", 10.00),
+("Chad", "Megachad",  "manager","Grant", "front-end", 100.00);
 
 -- INSERT INTO employee"Grant", "Royseth"
