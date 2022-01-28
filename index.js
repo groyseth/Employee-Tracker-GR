@@ -1,8 +1,7 @@
-const fs = require('fs');
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const { endianness } = require('os');
-
+const cTable = require('console.table');
 
 const db = mysql.createConnection(
   {
@@ -19,7 +18,7 @@ const db = mysql.createConnection(
 function department() {
   db.query("SELECT * FROM department ", function (err, result) {
     if (err) throw err;
-    console.log("department results:", result);
+    console.table("department results:", result);
     initalChoice();
 
   })
@@ -29,7 +28,7 @@ function department() {
 function employee_role() {
   db.query("SELECT * FROM employee_role", function (err, result) {
     if (err) throw error;
-    console.log("employee role results:", result);
+    console.table("employee role results:", result);
     initalChoice();
   })
 }
@@ -38,7 +37,7 @@ function employee_role() {
 function employee() {
   db.query("SELECT * FROM employee", function (err, result) {
     if (err) throw error;
-    console.log("employee info results:", result);
+    console.table("employee info results:", result);
     initalChoice();
   })
 }
@@ -69,7 +68,7 @@ function addRole() {
   db.query("SELECT * FROM department ", function (err, result) {
 
     const choices = result.map(r => {
-      return { name: r.department_name, value: r.department_name }
+      return { name: r.department_name, value: r.dep_id }
     })
 
     inquirer
@@ -96,9 +95,9 @@ function addRole() {
         //use role for choices \
         //
 
-        db.query("INSERT INTO employee_role (title, salary, dep_name) VALUES ( ?, ?, ?)", [answer.roleName, answer.salary, answer.departmentID], function (err, result) {
+        db.query("INSERT INTO employee_role (title, salary, dep_id) VALUES ( ?, ?, ?)", [answer.roleName, answer.salary, answer.departmentID], function (err, result) {
           if (err) throw err;
-          console.log("added role:", result);
+          console.log("added role:");
           initalChoice();
         })
       })
@@ -110,8 +109,9 @@ function addRole() {
 function addEmployee() {
   db.query("SELECT * FROM employee_role ", function (err, result){
     var roleChoices = result.map(r => {
-    return {name: r.title, value: r.title}
+    return {name: r.title, value: r.role_id}
   })
+  
 
   db.query("SELECT * FROM department ", function (err, result){
     var depChoices = result.map(r => {
@@ -121,7 +121,7 @@ function addEmployee() {
   db.query("SELECT * FROM employee ", function (err, result) {
   //  console.log(result);
     const managerChoices = result.map(r => {
-      return { name: r.first_name, value: r.first_name}
+      return { name: r.first_name, value: r.employee_id}
     })
     inquirer
       .prompt([
@@ -139,7 +139,7 @@ function addEmployee() {
         {
           type: "list",
           message: "What is employee role?",
-          choices: roleChoices,
+          choices: roleChoices, 
           name: "empRole"
         },
         {
@@ -147,21 +147,21 @@ function addEmployee() {
           message: "Who is your manager?",
           choices:managerChoices,
           name: "empManager"
-        },
-        {
-          type: "list",
-          message: "for witch department?",
-          choices:depChoices,
-          name: "empDEP"
         }
+        // {
+        //   type: "list",
+        //   message: "for witch department?",
+        //   choices:depChoices,
+        //   name: "empDEP"
+        // }
        
 
       ])
       .then((answer) => {
         console.log(answer);
-        db.query("INSERT INTO employee (first_name, last_name, role_title,  manager_name, department_name) VALUES(?, ?, ?, ?, ?)", [answer.empFirst, answer.empLast, answer.empRole, answer.empManager, answer.empDEP], function (err, result) {
+        db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)", [answer.empFirst, answer.empLast, answer.empRole, answer.empManager], function (err, result) {
           if (err) throw err;
-          console.log("Added employee:", result);
+          console.log("Added employee:");
           initalChoice();
         })
       })
@@ -170,8 +170,33 @@ function addEmployee() {
   })
 }
 
+function updateEmployee () {
+  db.query("SELECT * FROM employee ", function (err, result) {
+     console.log(result);
+      const managerChoices = result.map(r => {
+        return { name: r.first_name, value: r.first_name}
+      })
+  inquirer
+  .prompt([
 
-// employee()
+    {
+      type: "list",
+      message: "What employee to update?",
+      choices: managerChoices,
+      name: "empUpdate"
+    }
+  ])
+  .then((answer) => {
+    console.log(answer);
+    db.query("UPDATE employee SET first_name = ?)", answer.empUpdate, function (err, result) {
+      if (err) throw err;
+      console.log("Added employee:");
+      // initalChoice();
+    })
+  })
+})
+}
+
 
 function initalChoice() {
 
@@ -208,7 +233,7 @@ function initalChoice() {
           addEmployee()
           break;
         case "update an employee role":
-
+          updateEmployee()
           break;
         case "Exit":
           return;
@@ -219,3 +244,4 @@ function initalChoice() {
 
 }
 initalChoice()
+
